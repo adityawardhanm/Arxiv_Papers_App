@@ -1,4 +1,4 @@
-# built by adityawardhanm
+# built by aditywardhanm
 # This block of code is used to download the the dataset from the kaggle page and unzip it and save it 
 # in the directory defined by the address (currently in the same directory as the rest of the files)
 
@@ -15,7 +15,7 @@ dataset_name = 'Cornell-University/arxiv'           # The dataset_name contains 
 dataset = 'arxiv'                                   # The dataset contains the name of the .zip being downloaded;
 timestamp_file = 'last_execution_timestamp.txt'     # The timestamp_file contains the timstamp of when the the file was downloaded;
 
-def is_week_passed(last_timestamp):
+def week_check(last_timestamp):
     current_timestamp = time.time()
     # Calculate the time difference in seconds
     time_difference = current_timestamp - last_timestamp
@@ -41,14 +41,16 @@ def run_download():
     # Run the unzip command
     subprocess.run(unzip_command, shell=True)
 
-# Check if a week has passed since the last execution
-if not os.path.exists(timestamp_file) or is_week_passed(float(open(timestamp_file).read().strip())):
-    try:
-        run_download()
-        save_timestamp()
-        print("Download and extraction completed successfully.")
-    except Exception as e:
-        print(f"Error during download or extraction: {e}")
-    
-else:
-    print("Download skipped. A week has not passed since the last execution.")
+
+def data_setup(timestamp_file):
+    # Check if a week has passed since the last execution
+    if not os.path.exists(timestamp_file) or week_check(float(open(timestamp_file).read().strip())):
+        try:
+            run_download()
+            save_timestamp()
+            print("Download and extraction completed successfully.")
+        except Exception as e:
+            print(f"Error during download or extraction: {e}")
+        
+    else:
+        print("Download skipped. A week has not passed since the last execution.")
